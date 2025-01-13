@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sign-in page</title>
+</head>
+<body>
+    <form>
+        <label for="username">Choose your username</label><br>
+        <input type="text" id="username" name="username"><br>
+        <div id="invalid-username-container"></div><!--err msg txt here if username is taken or invalid-->
+
+        <label for="password">Create password</label><br>
+        <input type="password" id="password" name="password">
+        <!--placesholder for the retype password field-->
+        <div id="confirm-password-container"></div>
+        <div id='pw-match-container'></div> <!--error msg text here if entered pws don
+        't match-->
+        <div id="submit-button">
+            <button id="submit">Submit</button>
+        </div>
+    </form>
+
+    <script> // this script creates a confirm pw box after the blur event is detected for the first box
+        document.getElementById('password').addEventListener('blur', function (){
+            //check if confirm pw field is already added
+            const confirmPasswordContainer = document.getElementById('confirm-password-container');
+            if(!document.getElementById('confirm-password')) {
+                // create the confirm pw input field and label
+                const label = document.createElement('label');
+                label.setAttribute('for', 'confirm-password');
+                label.textContent = 'Retype password';
+
+                const input = document.createElement('input');
+                input.setAttribute('type','password');
+                input.setAttribute('id', 'confirm-password');
+                input.setAttribute('name', 'confirm-password');
+
+                // append the label and input to the container
+                confirmPasswordContainer.appendChild(label);
+                confirmPasswordContainer.appendChild(input);
+            } // next compare passwords for match. then compare username vs database. reject if dupe or add new entry to users table
+        });
+    </script>
+    
+    
+    <script> // this script will wait for pw and confirmation pw to be entered, check for equality before proceeding with account creation
+                // runs after submit button is clicked
+        function validateCredentials(event){
+            event.preventDefault();
+
+            console.log('submit button clicked');
+
+            // validate username and pw // 
+
+            const pw = document.getElementById('password').value; 
+            const confirmPw = document.getElementById('confirm-password').value; 
+
+            if(pw !== confirmPw){ // check pw match
+                console.log('passwords do not match');
+
+                // display text to say pws don't match
+                const pwAlert = document.createElement('p');
+                pwAlert.textContent = 'Passwords do not match!';
+                const msgContainer = document.getElementById('pw-match-container');
+                msgContainer.appendChild(pwAlert);
+
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            if (username.trim() === ''){
+                // username can't be empty, display error text 
+                const badUser = document.createElement('p');
+                badUser.textContent='Username cannot be empty!';
+                const badUserMsgContainer = document.getElementById('invalid-username-container');
+                badUserMsgContainer.appendChild(badUser);
+
+                return;
+            }
+
+            // check username against database for repeats
+            // sql stuff
+            
+
+            // validation successful , show button to continue to game or main menu
+
+        }
+
+        // attach event listener to submit button
+        const button = document.getElementById('submit');
+        button.addEventListener('click', validateCredentials);
+        
+    </script>
+</body>
+</html>
+
