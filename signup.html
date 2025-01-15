@@ -13,6 +13,8 @@
 
         <label for="password">Create password</label><br>
         <input type="password" id="password" name="password">
+        <!--placeholder for error message if password is too short or long-->
+        <div id="len-err-container"></div>
         <!--placesholder for the retype password field-->
         <div id="confirm-password-container"></div>
         <div id='pw-match-container'></div> <!--error msg text here if entered pws don
@@ -24,6 +26,31 @@
 
     <script> // this script creates a confirm pw box after the blur event is detected for the first box
         document.getElementById('password').addEventListener('blur', function (){
+
+            const pwField = document.getElementById('password');
+            const pw = pwField.value;
+            // check if pw is at least 8 chars long 
+
+            errContainer = document.getElementById('len-err-container');
+            errContainer.innerHTML = '';
+            if (pw.length < 8 || pw.length > 16){
+                console.log('err: password length is too short or too long');
+
+                // display error message
+
+                if (!document.getElementById('len-err-container').hasChildNodes()){ // if error message isn't already showing, show it
+
+                    const lenAlert = document.createElement('p');
+                    lenAlert.textContent = 'Password must be greater than 7 characters and less than 17 characters';
+                    const msgContainer = document.getElementById('len-err-container');
+                    msgContainer.appendChild(lenAlert);
+                }
+
+                return; 
+            }
+
+        
+
             //check if confirm pw field is already added
             const confirmPasswordContainer = document.getElementById('confirm-password-container');
             if(!document.getElementById('confirm-password')) {
@@ -50,7 +77,13 @@
         function validateCredentials(event){
             event.preventDefault();
 
+            
             console.log('submit button clicked');
+            const pwMatchContainer = document.getElementById('pw-match-container');
+            if(pwMatchContainer){
+                pwMatchContainer.innerHTML=''; // reset error message if user fixes passwords so they are the same 
+
+            }
 
             // validate username and pw // 
 
