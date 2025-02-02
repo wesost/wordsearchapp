@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sign-in page</title>
+    <title>sign-up page</title>
 </head>
 <body>
     <form>
@@ -131,13 +131,23 @@
                 return;
             }
 
-            // pick up HERE next 
+            // if we get to this point, can send to backend for further validation (check for duplicate username)
+            fetch('/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username: username, pw: pw})
+            })
+            .then(response => response.json())
+            .then(data => {
+                //handle response
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
 
-            // check username against database for repeats
-            // sql stuff
-            
-
-            // validation successful , show button to continue to game or main menu
+            });
 
         }
 
